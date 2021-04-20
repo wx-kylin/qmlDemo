@@ -9,7 +9,7 @@
 
 class QQmlContext;
 class QQmlComponent;
-//class QScopedPointer;
+
 namespace tmp {
 
 class Outline;
@@ -17,15 +17,22 @@ class Outline;
 class BaseOutline : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool active READ isActive NOTIFY activeChanged)
 public:
     BaseOutline();
     ~BaseOutline();
     static BaseOutline *self();
     void show();
     void hide();
+    bool isActive() const;
+
+Q_SIGNALS:
+    void activeChanged();
+
 private:
     QScopedPointer<Outline> m_outline;
     static BaseOutline *s_self;
+    bool m_active;
 };
 
 class Outline : public BaseOutline
@@ -37,9 +44,9 @@ public:
     void show();
     void hide();
 
-protected:
-    BaseOutline *outline();
-    const BaseOutline *outline() const;
+//protected:
+//    BaseOutline *outline();
+//    const BaseOutline *outline() const;
 
 private:
     BaseOutline *m_baseOutline;
@@ -55,15 +62,21 @@ BaseOutline *outline()
 }
 
 inline
-BaseOutline *Outline::outline()
+bool BaseOutline::isActive() const
 {
-    return m_baseOutline;
+    return m_active;
 }
-inline
-const BaseOutline *Outline::outline() const
-{
-    return m_baseOutline;
-}
+
+//inline
+//BaseOutline *Outline::outline()
+//{
+//    return m_baseOutline;
+//}
+//inline
+//const BaseOutline *Outline::outline() const
+//{
+//    return m_baseOutline;
+//}
 
 }
 #endif // OUTLINE_H
